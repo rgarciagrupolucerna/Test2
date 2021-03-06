@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data> 
+		<!--CFDI EXTERNAL LAYOUT-->
+		<template id="reporte_asistencia_external_layout">		
+	        <div class="header">	
+	        </div>
+	        <div class="article o_report_layout_standard" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id">
+				<t t-call="web.address_layout"/>
+	            <t t-raw="0" />
+	        </div>
+	        <div class="footer">
+	        </div>
+	    </template>
+
+
+    	<template id="report_de_asistencia_template">
+		    <t t-call="web.html_container">
+				<t t-call="nomina_lucerna.reporte_asistencia_external_layout">
+					<div class="page">
+						<t t-set="page_count" t-value="1"/>
+						
+						<t t-foreach="data" t-as="department">
+							<t t-set="dept" t-value="docs.env['hr.department'].browse(int(department))"/>
+							<t t-set="emp_count" t-value="0"/>
+							<div>
+								<div class="float-left">
+									<h5><b><t t-esc="company.name"/></b></h5><br/>
+									<span style="font-weight:bold">REPORTE DE ASISTENCIA DE LA SEMANA : <t t-esc="semana"/> DEL : <t t-esc="start_date"/> AL : <t t-esc="end_date"/></span><br/>
+									<span>Departamento : <t t-esc="dept.name"/></span>
+
+								</div>
+								<div class="float-right">
+									<span>Pagina: <span t-esc="page_count"/></span><br/>
+									<span>Fecha: <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d %B,%Y')"/></span><br/>
+									<span>Hora: <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%H : %M')"/></span><br/>
+								</div>
+								<div style="clear:both;"/>
+							</div>
+							<div style="text-align:center;">
+								<span style="text-align:center;">
+								&amp;lt;I&amp;gt;ncapacidad &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;lt;F&amp;gt;alta &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;lt;V&amp;gt;acaciones &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;lt;B&amp;gt;aja &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;lt;A&amp;gt;sistencia &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;lt;D&amp;gt;escanso
+								</span>
+							</div>
+							<div style="clear:both;"/>
+							
+							<table class="table table-bordered" font-size="9px;">
+								<thead>
+									<tr>
+										<th width="8%">Numero</th>
+										<th width="30%">Nombre</th>
+										<th width="2.5%">J</th>
+										<th width="3%">V</th>
+										<th width="3%">S</th>
+										<th width="3.5%">D</th>
+										<th width="3%">L</th>
+										<th width="3.5%">M</th>
+										<th width="4%">Mi</th>
+										<th width="6.5%">Extras</th>
+										<th width="6%">Total</th>
+										<th width="11%">Otras Percep.</th>
+										<th width="20%">Motivo Tiempo Extra</th>
+									</tr>
+								</thead>
+							</table>
+							<table class="table table-bordered" font-size="9px;">
+								<tbody>
+									<t t-foreach="docs.env['hr.employee'].browse(department_value).sorted(key=lambda x: x.no_empleado)" t-as="emp">
+										<t t-set="emp_count" t-value="emp_count+1"/>
+										<tr>
+											<td width="8%">
+	                                        	<span t-field="emp.no_empleado"/>
+	                                        </td>
+	                                        <td width="30%">
+	                                        	<span t-field="emp.name"/>
+	                                        </td>
+	                                        <td width="2.5%"></td>
+	                                        <td width="3%"></td>
+	                                        <td width="3%"></td>
+	                                        <td width="3.5%"></td>
+	                                        <td width="3%"></td>
+	                                        <td width="3.5%"></td>
+	                                        <td width="4%"></td>
+	                                        <td width="6.5%"></td>
+	                                        <td width="6%"></td>
+	                                        <td width="11%"></td>
+	                                        <td width="20%"></td>
+	                                    </tr>
+									</t>
+	                            </tbody>
+	                            
+							</table>
+							<div>
+								<span><b>Total Empleados Departamento : <span t-esc="emp_count"/></b></span><br/><br/>
+							</div>
+							
+							<div style="text-align:center;">
+								<span><b>Autorizo_________________________________  Reviso_________________________________ </b></span>
+							</div>
+							
+							<p style="page-break-after:always"></p>
+							<t t-set="page_count" t-value="page_count+1"/>
+						</t>
+					</div>
+				</t>
+			</t>
+		</template>
+	</data>
+</odoo>

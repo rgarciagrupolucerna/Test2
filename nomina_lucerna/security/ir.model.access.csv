@@ -1,0 +1,5 @@
+id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
+access_generar_recibo_nomina,generar.recibo.nomina,nomina_lucerna.model_generar_recibo_nomina,,1,1,1,1
+access_prima_dominical,prima.dominical,nomina_lucerna.model_prima_dominical,om_hr_payroll.group_hr_payroll_user,1,1,1,1
+access_descanso_laborado,descanso.laborado,nomina_lucerna.model_descanso_laborado,om_hr_payroll.group_hr_payroll_user,1,1,1,1
+access_reporte_de_asistencia,access_reporte_de_asistencia,model_reporte_de_asistencia,,1,1,1,1

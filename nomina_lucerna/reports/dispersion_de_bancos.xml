@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<report id="action_dispersion_de_bancos_xls" 
+			model="hr.payslip.run" 
+			string="Dispersion de Bancos" 
+			report_type="xlsx" 
+			name="nomina_lucerna.dispersion_de_bancos_xls" 
+			file="nomina_lucerna.dispersion_de_bancos_xls"
+	        attachment_use="False"/>
+</odoo>

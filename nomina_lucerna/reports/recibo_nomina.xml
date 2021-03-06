@@ -1,0 +1,600 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+    <record id="paperformat_recibo_nomina" model="report.paperformat">
+        <field name="name">Contrato Letter</field>
+        <field name="default" eval="True" />
+        <field name="format">A4</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Landscape</field>
+        <field name="margin_top">5</field>
+        <field name="margin_bottom">15</field>
+        <field name="margin_left">5</field>
+        <field name="margin_right">5</field>
+        <field name="header_line" eval="False" />
+        <field name="header_spacing">5</field>
+        <field name="dpi">90</field>
+    </record>
+
+        <!--Contrato Determinado-->
+    <report
+    id="report_recibo_nomina"
+    model="hr.payslip"
+    string="Recibo de nómina formato"
+    report_type="qweb-pdf"
+    name="nomina_lucerna.recibo_nomina"
+    file="nomina_lucerna.recibo_nomina"
+    paperformat="paperformat_recibo_nomina"
+    menu="False"
+    />
+
+    <!--CONTRATO EXTERNAL LAYOUT-->
+    <template id="recibo_nomina_layout">
+
+        <!-- Multicompañia -->
+            <t t-if="not o and doc">
+                <t t-set="o" t-value="doc" />
+            </t>
+            <t t-if="o and 'company_id' in o">
+                <t t-set="company" t-value="o.company_id"></t>
+            </t>
+            <t t-if="not o or not 'company_id' in o">
+                <t t-set="company" t-value="res_company"></t>
+            </t>
+
+        <div class="header">
+        </div>
+
+        <div class="article o_report_layout_standard" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id">
+            <t t-call="web.address_layout"/>
+            <t t-raw="0" />
+        </div>
+
+        <!--EMPIEZA EL FOOTER *ESTA BIEN*-->
+        <div class="footer">
+            <div class="row">
+                <div class="col-7" style="text-align:left;">
+                    Empresa
+                </div>
+
+                <div class="col-5" style="text-align:left;">
+                    Empleado
+                </div>
+
+            </div>
+            
+        </div>
+        
+        <!--TERMINA EL FOOTER-->
+
+
+    </template>
+
+    <template id="recibo_nomina">
+        <t t-call="web.html_container">
+        <t t-call="nomina_lucerna.recibo_nomina_layout">
+            <t t-foreach="docs" t-as="o">
+            <t t-set="dias_trabajados" t-value="0.0"/>
+            <t t-set="horas_trabajadas" t-value="0.0"/>
+            <t t-set="horas_extra" t-value="0.0"/>
+            <t t-set="horas_extra2" t-value="0.0"/>
+            <t t-set="dias_vacaiones" t-value="0.0"/>
+            <t t-set="septimo_dia" t-value="0.0"/>
+            <t t-set="prima_dominical" t-value="0.0"/>
+            <t t-set="total_percepciones" t-value="0.0"/>
+            <t t-set="total_percepciones2" t-value="0.0"/>
+            <t t-set="total_deducciones" t-value="0.0"/>
+            <t t-set="total_deducciones2" t-value="0.0"/>
+            <t t-set="total_otros_pagos" t-value="0.0"/>
+            <t t-set="neto_pagar" t-value="0.0"/>
+            <t t-set="vale_despensa" t-value="0.0"/>
+            <t t-set ="auxiliar" t-value="o.line_ids.filtered(lambda x:x.code=='AUX')" />
+            <t t-foreach="o.line_ids.filtered(lambda line: line.appears_on_payslip and line.category_id.code in ['AUX'])" t-as="line">
+                 <t t-if= "line.code == 'EFECT'">
+                    <t t-set="neto_pagar" t-value="line.total"/>
+                 </t>
+            </t>
+            <t t-foreach="o.line_ids.filtered(lambda line: line.appears_on_payslip and line.category_id.code in ['ALW'])" t-as="line">
+                 <t t-if= "line.code == 'P036'">
+                    <t t-set="vale_despensa" t-value="line.total"/>
+                 </t>
+            </t>
+            <div class="page"> 
+                <div class="oe_structure"/>    
+                    <div style="font-size:15px;text-align:justify">
+                    <!--START REPORT FORMAT NOMINA RECIBO-->
+                    <!--TABLE OF INFORMATION-->
+                    
+                    <div class="row">
+                        <div class="col-6" style="font-size:11px;">
+
+                            <t t-set="worked_hours" t-value="o.worked_days_line_ids.filtered(lambda x:x.code=='WORK100')" />
+                            <t t-if="len(worked_hours)>0">
+                                <t t-set="horas_trabajadas" t-value="horas_trabajadas + worked_hours[0].number_of_hours"/>
+                            </t>
+
+                            <t t-set="worked_hours_ext" t-value="o.worked_days_line_ids.filtered(lambda x:x.code=='HEX2')" />
+                            <t t-if="len(worked_hours_ext)>0">
+                                <t t-set="horas_extra" t-value="horas_extra + worked_hours_ext[0].number_of_hours"/>
+                            </t>
+                            <t t-set="worked_hours_ext2" t-value="o.worked_days_line_ids.filtered(lambda x:x.code=='HEX3')" />
+                            <t t-if="len(worked_hours_ext2)>0">
+                                <t t-set="horas_extra2" t-value="horas_extra2 + worked_hours_ext2[0].number_of_hours"/>
+                            </t>
+
+
+                             <!--HEADER DIV-->
+                            <div class="row">
+                                <div class="col-5">
+                                    <!--<img t-if="docs.company_id.logo" t-att-src="'data:image/png;base64,%s' % to_text(docs.company_id.logo)"
+                                    style="max-height: 130px;max-width: 130px;" />-->
+                                </div>
+                            <!--END HEADER DIV-->
+                            <!--GENERAL INFORMATION-->
+                                <div class="col-7">
+                                    <span style="font-size:13px;font-weight:bold" t-field="docs.company_id.name"></span><br/>
+                                    <!--ADDRESS-->
+                                    <span style="font-size:12px;" t-field="docs.company_id.street"></span>,
+                                    <span style="font-size:12px;" t-field="docs.company_id.street2"></span>,
+                                    <span style="font-size:12px;" t-field="docs.company_id.city"></span>,
+                                    C.P. <span style="font-size:12px;" t-field="docs.company_id.zip"></span><br/>
+                                    RFC: <span style="font-size:12px;" t-field="docs.company_id.vat"></span><br/> Registro patronal:  <span t-field="o.employee_id.registro_patronal"/><br/>
+                                    <span style="font-size:12px;" t-field="docs.company_id.city"></span>, <span style="font-size:12px;" t-field="docs.company_id.state_id"></span>, <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d')"/>
+                                </div>
+                            </div>
+                            <!--END GENERAL INFORMATION-->
+            
+                            <table class="table table-bordered" style="border:1px solid black;">
+                                <tr style="background-color:#E5E5E5; font-weight:bold;">
+                                    <td colspan="1" style="padding:3px;">NUMERO</td>
+                                    <td colspan="5" style="padding:3px;text-align:center;">NOMBRE</td>
+                                    <td colspan="2" style="padding:3px;text-align:center;">RFC</td>
+                                    <td colspan="2" style="padding:3px;text-align:center;">IMSS</td>
+                                </tr> 
+                                <tr>
+                                    <td colspan="1" style="padding:3px;"><span t-field="o.employee_id.no_empleado"/></td>
+                                    <td colspan="5" style="padding:3px;text-align:center;"><span t-field="o.employee_id.name"/></td>
+                                    <td colspan="2" style="padding:3px;text-align:center;"><span t-field="o.employee_id.rfc"/></td>
+                                    <td colspan="2" style="padding:3px;text-align:center;"><span t-field="o.employee_id.segurosocial"/></td>
+                                </tr>
+                              <!--  <tr>
+                                    <td style="background-color:#E5E5E5;padding:3px; font-weight:bold;">Domicilio</td>
+                                    <td colspan="9" style="padding:3px;"> <span t-field="o.employee_id.address_home_id.street"/> <span t-field="o.employee_id.address_home_id.street2"/> <span t-field="o.employee_id.address_home_id.city"/> <span t-field="o.employee_id.address_home_id.state_id.name"/> <span t-field="o.employee_id.address_home_id.zip"/></td>
+                                </tr> -->
+                                <tr style="background-color:#E5E5E5; font-weight:bold;">
+                                    <td colspan="3" style="padding:1px;text-align:center;">Periodo</td>
+                                    <td colspan="1" style="padding:1px;text-align:center;">Semana</td>
+                                    <td colspan="3" style="padding:1px;text-align:center;">Fecha de pago</td>
+                                    <td colspan="1" style="padding:1px;text-align:center;width:10%;">S. Diario</td>
+                                    <td colspan="1" style="padding:1px;text-align:center;width:10%;">S.int</td>
+                                </tr>
+                                <tr >
+                                    <td colspan="3" style="padding:1px;text-align:center;"><span t-field="o.date_from"/> - <span t-field="o.date_to"/></td>
+                                    <td colspan="1" style="padding:1px;text-align:center;"><span t-field="o.semana"/></td>
+                                    <td colspan="3" style="padding:1px;text-align:center;"><span t-field="o.fecha_pago"/></td>
+                                    <td colspan="1" style="padding:1px;text-align:center;width:10%;"><span t-esc="'%.2f'% o.contract_id.sueldo_diario"/></td>
+                                    <td colspan="1" style="padding:1px;text-align:center;width:10%;"><span t-esc="'%.2f'% o.contract_id.sueldo_base_cotizacion"/></td>
+                                </tr>
+
+                                <tr style="background-color:#E5E5E5;padding:3px; font-weight:bold;">
+                                    <td colspan="2" style="padding:3px;text-align:center;">Ingreso</td>
+                                    <td colspan="4" style="padding:3px;text-align:center;">CURP</td>
+                                    <td colspan="2" style="padding:3px;text-align:center;">Departamento</td>
+                                    <td colspan="2" style="padding:3px;text-align:center;">Puesto</td>
+                                </tr>
+                                <tr >
+                                    <td colspan="2" style="padding:3px;text-align:center;"><span t-field="o.contract_id.fecha_antiguedad"/></td>
+                                    <td colspan="4" style="padding:3px;"><span t-field="o.employee_id.curp"/></td>
+                                    <td colspan="2" style="padding:3px;text-align:center;"><span t-field="o.employee_id.department_id.name"/></td>
+                                    <td colspan="2" style="padding:3px;text-align:center;"><span t-field="o.employee_id.contract_id.job_id.name"/></td>
+                                </tr>
+
+                                 <tr style="background-color:#E5E5E5;height:10px;width:100%;">
+                                    <td colspan="6" style="padding:3px;text-align:center;width:60%;font-weight:bold;">PERCEPCIONES</td>
+                                    <td colspan="4" style="padding:3px;text-align:center;width:40%;font-weight:bold;">DEDUCCIONES</td>
+                                </tr>
+
+
+                                <tr>
+                                    <td colspan="6" style="padding:3px;text-align:center;max-width:50%;">
+                                    <!--TABLA PERCEPCIONES-->
+                                    <table class="table table-borderless" width="100%" border="5" frame="rhs">
+                                        <colgroup>
+                                        <col width='70%' />
+                                        <col width='30%' />
+                                        <col width='10%'/>
+
+                                        </colgroup>
+                                                <thead>
+                                                    <tr>
+                                                        <th style="padding:1px;">Concepto</th>
+                                                        <th style="padding:1px;"></th>
+                                                        <th style="padding:1px;" class="text-right">Percepción</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr t-foreach="o.line_ids.filtered(lambda line: line.appears_on_payslip and line.category_id.code in ['BASIC','ALW', 'ALW4'])" t-as="line">
+                                                <t t-if= "line.total > 0">
+                                                <t t-set="total_percepciones" t-value="total_percepciones + line.total"/>
+                                                <td style="padding:1px;" height="0"><span t-field="line.name"/></td>
+                                                
+                                                <t t-if= "line.code == 'P001'"><!-- días trabajados -->
+                                                    <td style="padding:1px;" height="0">
+                                                        <span t-esc="'%.2f'% horas_trabajadas"/>
+                                                    </td>
+                                                </t>
+                                                <t t-if= "line.code == 'HEX2'"><!-- días trabajados -->
+                                                    <td style="padding:1px;" height="0">
+                                                        <span t-esc="'%.2f'% horas_extra"/>
+                                                    </td>
+                                                </t>
+                                                <t t-if= "line.code == 'HEX3'"><!-- días trabajados -->
+                                                    <td style="padding:1px;" height="0">
+                                                        <span t-esc="'%.2f'% horas_extra2"/>
+                                                    </td>
+                                                </t>
+
+                                                <t t-if= "line.code != ('P001') or line.code != ('HEX2')  or line.code != ('HEX3')"><!-- días trabajados -->
+                                                    <td style="padding:1px;" height="0">
+                                                    </td>
+                                                </t>
+                                                
+                                                <td style="padding:1px;" height="0" class="text-right"> <span t-esc="line.total" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/></td>
+                                            </t>
+                                            </tr>
+
+                                            <tr t-foreach="o.line_ids.filtered(lambda line: line.appears_on_payslip and line.category_id.code in ['ALW3'])" t-as="line">
+                                            <!--<t t-if= "line.total > 0">-->
+                                                <t t-set="total_otros_pagos" t-value="total_otros_pagos + line.total"/>
+                                                <td style="padding:1px;" height="0"><span t-field="line.name"/></td>
+                                                <td style="padding:1px;" height="0"></td>
+                                                
+                                                <td style="padding:1px;" height="0" class="text-right"> <span t-esc="line.total"
+                                          t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/></td>
+                                            <!-- </t>-->
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <!--TERMINA TABLA PERCEPCIONES-->
+                                    </td>
+
+                                    <!--TABLA DEDUCCIONES-->
+
+                                    <td colspan="4" style="padding:1px;text-align:center;max-width:50%;">
+                                        <table class="table table-borderless" width="100%" border="5" frame="rhs">
+                                            <colgroup>
+                                            <col width='70%' />
+                                            <col width='30%' />
+                                            </colgroup>
+                                                        <thead>
+                                                            <tr>
+                                                                <th style="padding:1px;">Concepto</th>
+                                                                <th style="padding:1px;" class="text-right">Deducción</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                            <tr t-foreach="o.line_ids.filtered(lambda line: line.appears_on_payslip and line.category_id.code in ['DED'])" t-as="line">
+                                                <t t-if= "line.total > 0 "> <!-- and line.salary_rule_id.tipo_deduccion != '002' and line.salary_rule_id.tipo_deduccion != '001'-->
+                                                    <t t-set="total_deducciones" t-value="total_deducciones + line.total"/>
+                                                    <td style="padding:3px;" height="0"><span t-field="line.name"/></td>
+
+                                                    
+                                                    <td style="padding:3px;" height="0" class="text-right"><span t-esc="line.total" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/></td>
+                                                </t>
+                                            </tr> 
+                                            </tbody>
+                                        </table>
+                                        <!--TABLA DEDUCCIONES-->
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!--TABLA DE TOTALES-->
+
+                            <table class="table table-bordered" style="border:1px solid black;font-size:11px;">
+                                <tr style="background-color:#E5E5E5;">
+                                    <td colspan="1" style="padding:3px;">TOTAL DE PERCEPCIONES:</td>
+                                    <td colspan="2" style="padding:3px;text-align:right;font-weight:bold;"><span t-esc="total_percepciones + total_otros_pagos" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                    </td>
+                                    <td colspan="2" style="padding:3px;">TOTAL DE DEDUCCIONES</td>
+                                    <td colspan="2" style="padding:3px;text-align:right;font-weight:bold;"><span t-esc="total_deducciones" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}' />
+                                    </td>
+                                </tr>
+                                <tr style="height:100px;border:1px solid black;font-size:9px;">
+                                    <td colspan="4" style="max-width:100px;">
+                                        RECIBI DE  <strong><span t-field="docs.company_id.name"/></strong> DE CONFORMIDAD LA CANTIDAD INDICADA EN ESTE RECIBO, POR CONCEPTO DE SALARIO QUE DEVENGUE LOS DIAS MENCIONADOS EN EL MISMO, CORRESPONDIENTE A LA JORNADA ORDINARIA QUE LABORE, EN LA INTELIGENCIA DE QUE AL NO APARECER NINGUNA CANTIDAD POR CONCEPTO DE JORNADA EXTRAORDINARIA, ES POR QUE NO LAS TRABAJE. IGUALMENTE RECIBO LAS SUMAS RESPECTIVAS POR LOS CONCEPTOS Y PRESTACIONES ANOTADAS. ESTOY DE ACUERDO CON LAS DEDUCCIONES, POR TODO LO ANTERIOR NO TENGO HASTA LA FECHA NINGUNA RECLAMACIÓN QUE HACER.
+                                    </td>
+                                    <td colspan="4">
+                                        <center>
+                                        <table style="padding-left:50px;text-align:center;float:center;">
+                                            <tr style="text-align:center;">
+                                                <td style="text-align:center;padding:3px;">
+                                                    <span t-esc="neto_pagar" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                                </td>
+                                            </tr>
+                                            <tr style="background-color:#E5E5E5;">
+                                                <td style="text-align:center;padding:3px;">
+                                                <strong>NETO A PAGAR</strong>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <br/>
+                                        <table style="padding-left:50px;text-align:center;float:center;">
+                                            <tr style="text-align:center;">
+                                                <td style="text-align:center;padding:3px;">
+                                                    <span t-esc="vale_despensa" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                                </td>
+                                            </tr>
+                                            <tr style="background-color:#E5E5E5;">
+                                                <td style="text-align:center;padding:3px;">
+                                                <strong>VALE DE DESPENSA</strong>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </center>
+
+                                        <br/>
+                                        <center><strong>Ahorro acumulado</strong></center>
+                                        <center><span t-field="o.acum_fondo_ahorro_anual"/></center>
+
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <center><span style="font-size:15px;">RECIBI</span></center><br/>
+                            <center>_________________________________________________</center>
+                        </div>
+
+                        <!--ADD CENTER COLUMN-->
+                        <div class="col-6" style="font-size:11px;padding-left:30px;">
+
+                             <!--HEADER DIV-->
+                            <div class="row">
+                                <div class="col-5">
+                                    <!--<img t-if="docs.company_id.logo" t-att-src="'data:image/png;base64,%s' % to_text(docs.company_id.logo)"
+                                    style="max-height: 130px;max-width: 130px;" />-->
+                                </div>
+                            <!--END HEADER DIV-->
+                            <!--GENERAL INFORMATION-->
+                                <div class="col-7">
+                                    <span style="font-size:13px;font-weight:bold" t-field="docs.company_id.name"></span><br/>
+                                    <!--ADDRESS-->
+                                    <span style="font-size:12px;" t-field="docs.company_id.street"></span>,
+                                    <span style="font-size:12px;" t-field="docs.company_id.street2"></span>,
+                                    <span style="font-size:12px;" t-field="docs.company_id.city"></span>,
+                                    C.P. <span style="font-size:12px;" t-field="docs.company_id.zip"></span><br/>
+                                    RFC: <span style="font-size:12px;" t-field="docs.company_id.vat"></span><br/>Registro patronal:  <span t-field="o.employee_id.registro_patronal"/><br/>
+                                    <span style="font-size:12px;" t-field="docs.company_id.city"></span>, <span style="font-size:12px;" t-field="docs.company_id.state_id"></span>, <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d')"/>
+                                </div>
+                            </div>
+                            <!--END GENERAL INFORMATION-->
+            
+                            <table class="table table-bordered" style="border:1px solid black;">
+                                <tr style="background-color:#E5E5E5; font-weight:bold;">
+                                    <td colspan="1" style="padding:3px;">NUMERO</td>
+                                    <td colspan="5" style="padding:3px;text-align:center;">NOMBRE</td>
+                                    <td colspan="2" style="padding:3px;text-align:center;">RFC</td>
+                                    <td colspan="2" style="padding:3px;text-align:center;">IMSS</td>
+                                </tr> 
+                                <tr>
+                                    <td colspan="1" style="padding:3px;"><span t-field="o.employee_id.no_empleado"/></td>
+                                    <td colspan="5" style="padding:3px;text-align:center;"><span t-field="o.employee_id.name"/></td>
+                                    <td colspan="2" style="padding:3px;text-align:center;"><span t-field="o.employee_id.rfc"/></td>
+                                    <td colspan="2" style="padding:3px;text-align:center;"><span t-field="o.employee_id.segurosocial"/></td>
+                                </tr>
+                               <!-- <tr>
+                                    <td style="background-color:#E5E5E5;padding:3px; font-weight:bold;">Domicilio</td>
+                                    <td colspan="9" style="padding:3px;"> <span t-field="o.employee_id.address_home_id.street"/> <span t-field="o.employee_id.address_home_id.street2"/> <span t-field="o.employee_id.address_home_id.city"/> <span t-field="o.employee_id.address_home_id.state_id.name"/> <span t-field="o.employee_id.address_home_id.zip"/></td>
+                                </tr>-->
+                                <tr style="background-color:#E5E5E5; font-weight:bold;">
+                                    <td colspan="3" style="padding:1px;text-align:center;">Periodo</td>
+                                    <td colspan="1" style="padding:1px;text-align:center;">Semana</td>
+                                    <td colspan="3" style="padding:1px;text-align:center;">Fecha de pago</td>
+                                    <td colspan="1" style="padding:1px;text-align:center;">S. Diario</td>
+                                    <td colspan="1" style="padding:1px;text-align:center;">S.int</td>
+                                </tr>
+                                <tr >
+                                    <td colspan="3" style="padding:1px;text-align:center;"><span t-field="o.date_from"/> - <span t-field="o.date_to"/></td>
+                                    <td colspan="1" style="padding:1px;text-align:center;"><span t-field="o.semana"/></td>
+                                    <td colspan="3" style="padding:1px;text-align:center;"><span t-field="o.fecha_pago"/></td>
+                                    <td colspan="1" style="padding:1px;text-align:center;"><span t-esc="'%.2f'% o.contract_id.sueldo_diario"/></td>
+                                    <td colspan="1" style="padding:1px;text-align:center;"><span t-esc="'%.2f'% o.contract_id.sueldo_base_cotizacion"/></td>
+
+                                </tr>
+
+                                <tr style="background-color:#E5E5E5;padding:3px; font-weight:bold;">
+                                    <td colspan="2" style="padding:3px;text-align:center;">Ingreso</td>
+                                    <td colspan="4" style="padding:3px;text-align:center;">CURP</td>
+                                    <td colspan="2" style="padding:3px;text-align:center;">Departamento</td>
+                                    <td colspan="2" style="padding:3px;text-align:center;">Puesto</td>
+                                </tr>
+                                <tr >
+                                    <td colspan="2" style="padding:3px;text-align:center;"><span t-field="o.contract_id.fecha_antiguedad"/></td>
+                                    <td colspan="4" style="padding:3px;"><span t-field="o.employee_id.curp"/></td>
+                                    <td colspan="2" style="padding:3px;text-align:center;"><span t-field="o.employee_id.department_id.name"/></td>
+                                    <td colspan="2" style="padding:3px;text-align:center;"><span t-field="o.employee_id.contract_id.job_id.name"/></td>
+                                </tr>
+
+                                 <tr style="background-color:#E5E5E5;height:10px; ">
+                                    <td colspan="6" style="padding:3px;text-align:center;width:60%;font-weight:bold;">PERCEPCIONES</td>
+                                    <td colspan="4" style="padding:3px;text-align:center;width:40%;font-weight:bold;">DEDUCCIONES</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="6" style="padding:3px;text-align:center;max-width:50%;">
+                                    <!--TABLA PERCEPCIONES-->
+                                    <table class="table table-borderless" width="100%" border="5" frame="rhs">
+                                        <colgroup>
+                                        <col width='70%' />
+                                        <!--<col width='25%' />-->
+                                        <col width='30%' />
+                                        <col width='10%' />
+                                        </colgroup>
+                                                <thead>
+                                                    <tr>
+                                                        <th style="padding:1px;">Concepto</th>
+                                                        <th style="padding:1px;"></th>
+                                                        <th style="padding:1px;" class="text-right">Percepción</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr t-foreach="o.line_ids.filtered(lambda line: line.appears_on_payslip and line.category_id.code in ['BASIC','ALW', 'ALW4'])" t-as="line">
+                                                <t t-if= "line.total > 0">
+                                                <t t-set="total_percepciones2" t-value="total_percepciones2 + line.total"/>
+                                                <td style="padding:1px;" height="0"><span t-field="line.name"/></td>
+
+                                                <t t-if= "line.code == 'P001'"><!-- días trabajados -->
+                                                    <td style="padding:1px;" height="0">
+                                                        <span t-esc="'%.2f'% horas_trabajadas"/>
+                                                    </td>
+                                                </t>
+
+                                                <t t-if= "line.code == 'HEX2'"><!-- días trabajados -->
+                                                    <td style="padding:1px;" height="0">
+                                                        <span t-esc="'%.2f'% horas_extra"/>
+                                                    </td>
+                                                </t>
+                                                <t t-if= "line.code == 'HEX3'"><!-- días trabajados -->
+                                                    <td style="padding:1px;" height="0">
+                                                        <span t-esc="'%.2f'% horas_extra2"/>
+                                                    </td>
+                                                </t>
+
+                                                <t t-if= "line.code != ('P001') or line.code != ('HEX2')  or line.code != ('HEX3')"><!-- días trabajados -->
+                                                    <td style="padding:1px;" height="0">
+                                                    </td>
+                                                </t>
+
+                                                <!--<td style="padding:3px;" height="0" class="text-right">
+                                                    <t t-if= "line.code == 'P001'"> días trabajados 
+                                                        <span t-esc="'%.2f'% dias_trabajados"/>
+                                                    </t>
+                                                    <t t-if= "line.code == 'P019'">  vacaciones 
+                                                        <span t-esc="'%.2f'% dias_vacaiones"/>
+                                                    </t>
+                                                    <t t-if= "line.code == 'P010'">  prima dominical 
+                                                        <span t-esc="'%.2f'% prima_dominical"/>
+                                                    </t>
+                                                    <t t-if= "line.code == 'P003'"> septimo día
+                                                        <span t-esc="'%.2f'% septimo_dia"/>
+                                                    </t>
+                                                </td>-->
+                                                
+                                                <td style="padding:1px;" height="0" class="text-right"> <span t-esc="line.total" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/></td>
+                                            </t>
+                                            </tr>
+                                            <tr t-foreach="o.line_ids.filtered(lambda line: line.appears_on_payslip and line.category_id.code in ['ALW3'])" t-as="line">
+                                            <!--<t t-if= "line.total > 0">-->
+                                                <t t-set="total_otros_pagos" t-value="total_otros_pagos + line.total"/>
+                                                <td style="padding:1px;" height="0"><span t-field="line.name"/></td>
+                                                
+                                                <td style="padding:1px;" height="0" ></td>
+                                                <td style="padding:1px;" height="0" class="text-right"> <span t-esc="line.total"
+                                          t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/></td>
+                                            <!-- </t>-->
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <!--TERMINA TABLA PERCEPCIONES-->
+                                    </td>
+
+                                    <!--TABLA DEDUCCIONES-->
+
+                                    <td colspan="4" style="padding:1px;text-align:center;max-width:50%;">
+                                        <table class="table table-borderless" width="100%" border="5" frame="rhs">
+                                            <colgroup>
+                                            <col width='70%' />
+                                            <col width='30%' />
+                                            </colgroup>
+                                                        <thead>
+                                                            <tr>
+                                                                <th style="padding:1px;">Concepto</th>
+                                                                <th style="padding:1px;" class="text-right">Deducción</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                            <tr t-foreach="o.line_ids.filtered(lambda line: line.appears_on_payslip and line.category_id.code in ['DED'])" t-as="line">
+                                                <t t-if= "line.total > 0 "> <!-- and line.salary_rule_id.tipo_deduccion != '002' and line.salary_rule_id.tipo_deduccion != '001'-->
+                                                    <t t-set="total_deducciones2" t-value="total_deducciones2 + line.total"/>
+                                                    <td style="padding:3px;" height="0"><span t-field="line.name"/></td>
+
+                                                    
+                                                    <td style="padding:3px;" height="0" class="text-right"><span t-esc="line.total" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/></td>
+                                                </t>
+                                            </tr> 
+                                            </tbody>
+                                        </table>
+                                        <!--TABLA DEDUCCIONES-->
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!--TABLA DE TOTALES-->
+
+                            <table class="table table-bordered" style="border:1px solid black;font-size:11px;">
+                                <tr style="background-color:#E5E5E5;">
+                                    <td colspan="1" style="padding:3px;">TOTAL DE PERCEPCIONES:</td>
+                                    <td colspan="2" style="padding:3px;text-align:right;font-weight:bold;"><span t-esc="total_percepciones2 + total_otros_pagos" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+</td>
+                                    <td colspan="2" style="padding:3px;">TOTAL DE DEDUCCIONES</td>
+                                    <td colspan="2" style="padding:3px;text-align:right;font-weight:bold;"><span t-esc="total_deducciones2" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}' />
+</td>
+                                </tr>
+                                <tr style="height:100px;border:1px solid black;font-size:9px;">
+                                    <td colspan="4" style="max-width:100px;">
+                                        RECIBI DE  <strong><span t-field="docs.company_id.name"/></strong> DE CONFORMIDAD LA CANTIDAD INDICADA EN ESTE RECIBO, POR CONCEPTO DE SALARIO QUE DEVENGUE LOS DIAS MENCIONADOS EN EL MISMO, CORRESPONDIENTE A LA JORNADA ORDINARIA QUE LABORE, EN LA INTELIGENCIA DE QUE AL NO APARECER NINGUNA CANTIDAD POR CONCEPTO DE JORNADA EXTRAORDINARIA, ES POR QUE NO LAS TRABAJE. IGUALMENTE RECIBO LAS SUMAS RESPECTIVAS POR LOS CONCEPTOS Y PRESTACIONES ANOTADAS. ESTOY DE ACUERDO CON LAS DEDUCCIONES, POR TODO LO ANTERIOR NO TENGO HASTA LA FECHA NINGUNA RECLAMACIÓN QUE HACER.
+                                    </td>
+                                    <td colspan="4">
+                                        <center>
+                                        <table style="padding-left:50px;text-align:center;float:center;">
+                                            <tr style="text-align:center;">
+                                                <td style="text-align:center;padding:3px;">
+                                                    <span t-esc="neto_pagar" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                                </td>
+                                            </tr>
+                                            <tr style="background-color:#E5E5E5;">
+                                                <td style="text-align:center;padding:3px;">
+                                                <strong>NETO A PAGAR</strong>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <br/>
+                                        <table style="padding-left:50px;text-align:center;float:center;">
+                                            <tr style="text-align:center;">
+                                                <td style="text-align:center;padding:3px;">
+                                                    <span t-esc="vale_despensa" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                                </td>
+                                            </tr>
+                                            <tr style="background-color:#E5E5E5;">
+                                                <td style="text-align:center;padding:3px;">
+                                                <strong>VALE DE DESPENSA</strong>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </center>
+
+                                        <br/>
+                                        <center><strong>Ahorro acumulado</strong></center>
+                                        <center><span t-field="o.acum_fondo_ahorro_anual"/></center>
+
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <center><span style="font-size:15px;">RECIBI</span></center><br/>
+                            <center>_________________________________________________</center>
+                        </div>
+                    </div>
+                    </div>
+            </div>
+            <p style="page-break-after:always;"/>
+            </t>
+        </t>
+        </t>
+    </template>
+
+
+</data>
+
+</odoo>

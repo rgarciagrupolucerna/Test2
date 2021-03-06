@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+    <record id="paperformat_carta_laboral" model="report.paperformat">
+        <field name="name">Carta laboral</field>
+        <field name="default" eval="True" />
+        <field name="format">Letter</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">0</field>
+        <field name="margin_bottom">0</field>
+        <field name="margin_left">0</field>
+        <field name="margin_right">0</field>
+        <field name="header_line" eval="False" />
+        <field name="header_spacing">15</field>
+        <field name="dpi">90</field>
+    </record>
+
+    <!--Contrato Determinado-->
+    <report
+    id="report_carta_laboral"
+    model="hr.employee"
+    string="Carta laboral"
+    report_type="qweb-pdf"
+    name="nomina_lucerna.carta_laboral"
+    file="Carta laboral"
+    paperformat="paperformat_carta_laboral"
+    />
+
+    <!--CONTRATO EXTERNAL LAYOUT-->
+    <template id="carta_laboral_external_layout">
+        <div class="header">
+        </div>
+
+        <div class="article o_report_layout_standard" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id">
+            <t t-call="web.address_layout"/>
+            <t t-raw="0" />
+        </div>
+
+        <!--EMPIEZA EL FOOTER *ESTA BIEN*-->
+        <div class="footer">
+            
+        </div>
+        
+        <!--TERMINA EL FOOTER-->
+
+
+    </template>
+
+    <template id="carta_laboral">
+        <t t-call="web.html_container">
+        <t t-call="nomina_lucerna.carta_laboral_external_layout">
+            <div class="page" t-attf-style="background-image:url('/nomina_lucerna/static/src/img/lucerna_back.png'); background-size:245mm 320mm; width:245mm; height:320mm;"> 
+                <div class="oe_structure"/>
+                    <div style="font-size:18px;text-align:justify;padding-left:10%;padding-right:10%;padding-top:20%;padding-bottom:20%;">
+
+                        <strong>Cd. Juárez, Chih. A  <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d')"/>.<br/><br/><br/><br/>
+        
+                        A QUIEN CORRESPONDA<br/>
+                        P R E S E N T E.-<br/><br/></strong>
+
+                        <span style="padding-left:5em">Por medio de la presente hacemos de su conocimiento que el C.  <strong>  <span  t-field="docs.name"/></strong>, labora en esta empresa desde el  <strong><span t-field="docs.contract_id.fecha_antiguedad"/></strong> a la fecha de manera permanente, con número de empleado <strong><span t-field="docs.no_empleado"/></strong>, ocupando el puesto de   <strong><span t-field="docs.contract_id.job_id"/></strong> en el departamento de  <strong><span t-field="docs.contract_id.department_id"/></strong>, percibiendo un salario mensual de  <strong><span t-field="docs.contract_id.wage"/> (<span t-esc="docs._get_amount_2_text(docs.contract_id.wage)"/>)</strong> <br/><br/>
+
+                        Agradeciendo de antemano las atenciones al presente y sin más por el momento quedamos de ustedes para cualquier aclaración o duda al respecto.<br/><br/><br/><br/> </span>
+
+                        A t e n t a m e n t e.-<br/><br/><br/>
+
+                        Lic. Denisse Hipolito.<br/>
+                        Jefe De Recursos Humanos.
+
+
+
+
+                    </div>      
+            </div>
+
+
+        </t>
+        </t>
+    </template>
+
+
+</data>
+
+</odoo>

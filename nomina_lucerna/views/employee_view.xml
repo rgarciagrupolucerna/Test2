@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+   <record id="view_employee_form_inherit_lucerna" model="ir.ui.view">
+        <field name="name">hr.employee.nomina</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="nomina_cfdi_ee.view_employee_form_inherit"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='diario_pago']" position="after">
+                <field name="no_tarjeta_despensa"/>
+                <field name="clabe_interbancaria_lucerna"/>
+            </xpath>
+
+            <xpath expr="//field[@name='jornada']" position="after">
+                <field name="tipo_contrato_lucerna" invisible="1"/>
+            </xpath>
+
+            <xpath expr="//notebook" position="inside">
+                <page name="credencial" string="Credencial">
+                    <field name="credencial_empleado" placeholder="Credencial"/>
+                </page>
+           </xpath>
+        </field>
+    </record>
+    
+</odoo>
