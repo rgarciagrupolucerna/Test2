@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+    <!--Contrato Indeterminado-->
+    <report
+    id="report_contrato_indeterminado"
+    model="hr.employee"
+    string="Contrato Indeterminado"
+    report_type="qweb-pdf"
+    name="nomina_lucerna.contrato_indeterminado"
+    file="Contrato indeterminado"
+    attachment_use="False"
+    />
+
+
+
+
+</odoo>

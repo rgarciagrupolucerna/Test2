@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <report
+        string="Pension alimenticia"
+        id="action_report_pension_alimenticia"
+        model="hr.payslip.run"
+        report_type="qweb-pdf"
+        name="nomina_lucerna.report_pension_alimenticia"
+        file="nomina_lucerna.report_pension_alimenticia"
+        
+    />
+    
+    <template id="report_pension_alimenticia">
+    	<t t-call="web.html_container">
+			<t t-foreach="docs" t-as="o">
+				<t t-call="web.external_layout" t-lang="es_MX">
+					<t t-foreach="o.slip_ids" t-as="payslip">
+						<t t-if="payslip" t-set="payslip_line" t-value="payslip.line_ids.filtered(lambda x: x.code == 'D010')"/>
+						<t t-foreach="payslip_line" t-as="line">
+							<div class="page">
+								<div class="oe_structure"/>
+								<div class="float-right">
+									<span>BO. POR    <strong><u><span t-esc="line.amount" style="text-transform: uppercase;" t-options='{"widget": "monetary", "display_currency": payslip.company_id.currency_id}'/></u></strong></span>
+								</div>
+								<br/><br/><br/><br/>
+								<div>
+									<span>
+									RECIBI DE <strong><span t-esc="payslip.company_id.name" style="text-transform: uppercase;"/></strong><br/>
+									LA CANTIDAD DE <strong><span t-esc="payslip.company_id.currency_id.amount_to_text(line.amount)" style="text-transform: uppercase;" t-esc-options='{"widget": "monetary","case":"capital"}'/></strong> POR CONCEPTO DE PAGO DE PENSION ALIMENTICIA SEGUN OFICIO #
+									</span><br/><br/>
+									<span>
+									CORRESPONDIENTE A LA SEMANA # <strong><t t-esc="o.semana"/></strong> DEL <strong><span t-esc="o.date_start.strftime('%d %B,%Y')" style="text-transform: uppercase;"/></strong> AL <strong><span t-esc="o.date_end.strftime('%d %B,%Y')" style="text-transform: uppercase;"/></strong> DEL SR. <strong><span t-esc="payslip.employee_id.name" style="text-transform: uppercase;"/></strong>
+									</span>
+								</div>
+								<br/><br/>
+								<div class="float-right">
+									<span>
+										CIUDAD JUAREZ, CHIH. A <strong><span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d %B,%Y')" style="text-transform: uppercase;"/></strong>
+									</span>
+								</div>
+								
+								<p style="page-break-after:always"></p>
+							</div>
+						</t>
+					</t>
+				</t>
+			</t>
+		</t>
+    </template>
+</odoo>

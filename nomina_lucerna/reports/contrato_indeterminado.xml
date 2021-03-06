@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+    <!--Contrato Indeterminado-->
+    <report
+    id="report_contrato_indeterminado"
+    model="hr.employee"
+    string="Contrato Indeterminado"
+    report_type="qweb-pdf"
+    name="nomina_lucerna.contrato_indeterminado"
+    file="Contrato indeterminado"
+    paperformat="nomina_lucerna.paperformat_contrato"
+    />
+
+    <!--CONTRATO EXTERNAL LAYOUT-->
+    <template id="contrato_external_layout">
+        <div class="header">
+            
+        </div>
+
+        <div class="article o_report_layout_standard" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id">
+            <t t-call="web.address_layout"/>
+            <t t-raw="0" />
+        </div>
+
+        <!--EMPIEZA EL FOOTER *ESTA BIEN*-->
+        <div class="footer">
+            
+        </div>
+        
+        <!--TERMINA EL FOOTER-->
+    </template>
+
+    <template id="contrato_indeterminado">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="nomina_lucerna.contrato_external_layout">
+                    <div class="page"> 
+                        <div class="oe_structure"/>
+
+        <div style="font-size:16px;text-align:justify">
+
+                        
+        <center><strong>CONTRATO INDIVIDUAL DE TRABAJO POR TIEMPO INDETERMINADO</strong></center><br/>
+ 
+        CONTRATO INDIVIDUAL DE TRABAJO POR TIEMPO INDETERMINADO QUE CELEBRAN POR UNA PARTE UNIÓN DE GANADEROS LECHEROS DE JUAREZ, S. A. DE C. V., REPRESENTADA EN ESTE ACTO POR LA LIC. GABRIELA DENISSE HIPOLITO VALERIO, EN SU CARÁCTER DE REPRESENTANTE LEGAL Y A QUIEN EN LO SUCESIVO Y PARA LOS EFECTOS DEL PRESENTE CONTRATO SE LE DENOMINARÁ "LA EMPRESA" Y POR LA OTRA, EL (LA) C. NOMBRE DE EMPLEADO A QUIEN EN LO SUCESIVO Y PARA LOS EFECTOS DEL PRESENTE INSTRUMENTO SE LE DENOMINARÁ EL "TRABAJADOR" Y QUE SUJETAN AL TENOR DE LAS SIGUIENTES:<br/><br/>
+ 
+        <center><strong>D E C L A R A C I O N E S</strong></center><br/>
+        
+        <strong>I. DE "LA EMPRESA":</strong> <br/><br/>
+ 
+        1. Ser una persona moral, constituida conforme a las leyes del país, como se acredita con la escritura pública número 3426 de fecha 20 de febrero 1987 pasada ante la fe del Licenciado Alejandro Victor Gonzalez Bernal, Notario Público número 19 para el Distrito Bravo, Estado de Chihuahua.  <br/><br/>
+ 
+        2. Estar representada en la firma del presente contrato por la Lic. Gabriela Denisse Hipólito Valerio, en su carácter de Representante legal y bajo el amparo de la escritura pública número 8384 de fecha 8 de junio de 2017 pasada ante la fe del Licenciado Jaime Alfredo Delgado Lara, Notario Público número 7 de para el distrito bravo, Estado de Chihuahua. <br/><br/>
+ 
+        3. Tener su domicilio en Calle Ramón Rayón # 1351 Colonia Waterfill Rio Bravo c.p. 32553 en Ciudad Juárez, Chihuahua.<br/><br/>
+  
+        <strong>II. DEL “TRABAJADOR”:</strong> <br/><br/>
+ 
+       1. Llamarse <strong><span  t-field="docs.name"/></strong>, ser de nacionalidad Mexicano; sexo <strong><span  t-field="docs.gender"/></strong>; tener EDAD EMPLEADO años de edad; estado civil <strong><span  t-field="docs.marital"/></strong>; con domicilio particular en <strong><span  t-field="docs.address_home_id.street_name"/></strong> EXT <span  t-field="docs.address_home_id.street_number"/> INT <span  t-field="docs.address_home_id.street_number2"/>, Colonia <span  t-field="docs.address_home_id.l10n_mx_edi_colony"/> de <span  t-field="docs.address_home_id.city"/>, <span  t-field="docs.address_home_id.state_id"/> código postal <span  t-field="docs.address_home_id.zip"/> ; con RFC: <span  t-field="docs.rfc"/> EMPLEDO y CURP:<span  t-field="docs.curp"/>.<br/><br/>
+
+        2. Que tiene la capacidad y las aptitudes necesarias para desarrollar el trabajo origen de este Contrato. <br/><br/>
+ 
+        3. Estar de acuerdo en desempeñar su actividad conforme a las condiciones establecidas en el presente Contrato. <br/><br/>
+ 
+        Por lo anterior, las partes han convenido celebrar el presente Contrato de trabajo al tenor de las siguientes:
+
+        <p style="page-break-after:always"></p>
+
+
+        <center><strong>C L Á U S U L A S</strong></center>
+ 
+        <strong>PRIMERA.-</strong> “LA EMPRESA” contrata al “TRABAJADOR” por tiempo indeterminado, conforme lo establece el artículo 35 de la Ley Federal del Trabajo, para que preste sus servicios en el puesto de <strong>“<span t-field="docs.contract_id.job_id.name"/>”</strong> a partir del <strong><span t-field="docs.contract_id.fecha_antiguedad"/></strong>. <br/><br/> 
+ 
+        <strong>SEGUNDA.-</strong> “LA EMPRESA” comunica al “TRABAJADOR” que la temporalidad del presente Contrato obedece a la naturaleza del trabajo a desempeñar, el cual se describe en el formato anexo a la presente, (Descripción de Puesto). <br/><br/> 
+
+        <strong>TERCERA.-</strong> El “TRABAJADOR” se obliga a prestar sus servicios en el domicilio de “LA EMPRESA” o en cualquier otro lugar que ésta le indique dentro de Ciudad Juárez, Chihuahua y/o de cualquiera otra entidad de la República Mexicana. <br/><br/> 
+ 
+        <strong>CUARTA.-</strong> El “TRABAJADOR” Conviene con “LA EMPRESA” que en cualquier momento el horario puede ser modificado de acuerdo con las necesidades de la compañía, por lo que “LA EMPRESA” puede establecer dicho horario bajo cualquiera de los tipos de jornada señaladas en el artículo 59 de la Ley Federal del Trabajo, ya sea para implantar una labor semanaria de lunes a viernes y obtener el reposo del sábado en la tarde, de ese día por completo o cualquier otra modalidad equivalente. <br/><br/> 
+
+        <strong>QUINTA.-</strong> Como remuneración por sus servicios, el “TRABAJADOR” recibirá la cantidad diaria de <strong><span t-field="docs.contract_id.sueldo_diario"/>(<span t-esc="docs._get_amount_2_text(docs.contract_id.sueldo_diario)"/>)</strong>, cuyo pago será hecho por semana, conviniendo las partes en que el salario mencionado en la presente cláusula incluye el importe de la parte proporcional del séptimo día y el pago de los días de descanso obligatorio. <br/><br/> 
+ 
+        “LA EMPRESA” hará por cuenta del “TRABAJADOR” las deducciones legales correspondientes, particularmente las alimentarias y las referentes al impuesto sobre la renta, las aportaciones de seguridad social IMSS, Infonavit y SAR. Para tal efecto “LA EMPRESA” efectuará las inscripciones correspondientes ante dichas instituciones, en los términos de las legislaciones respectivas. <br/><br/> 
+ 
+        <strong>SEXTA.-</strong> El “TRABAJADOR” disfrutará de un día de descanso con goce de salario íntegro por cada seis de trabajo, el cual será preferentemente el día domingo de cada semana. “LA EMPRESA” podrá, previo acuerdo con el “TRABAJADOR”, variar el descanso semanal conforme a las necesidades de la misma. <br/><br/> 
+ 
+        <strong>SEPTIMA.-</strong> El “TRABAJADOR” no podrá laborar tiempo extraordinario de trabajo, sin previa autorización por escrito que “LA EMPRESA” le otorgue por conducto de sus representantes. <br/><br/> 
+ 
+        <strong>OCTAVA.-</strong> El “TRABAJADOR” disfrutará de un término anual de vacaciones de 6 días, el cual se incrementará anualmente en los términos señalados en el artículo 76 de la Ley Federal del Trabajo. Asimismo, percibirá una prima vacacional del 25%, sobre la cantidad correspondiente al lapso en cuestión. <br/><br/> 
+ 
+        <strong>NOVENA.-</strong> El “TRABAJADOR” percibirá un aguinaldo anual de  <strong><span t-esc="docs._get_dias_aguinaldo(docs.contract_id)"/></strong> días de salario, el cual se cubrirá de manera proporcional al tiempo de los servicios prestados a “LA EMPRESA” durante dicho periodo. <br/><br/> 
+
+        <p style="page-break-after:always"></p>
+
+        <strong>DÉCIMA.-</strong> El “TRABAJADOR” se obliga en términos de la fracción X del artículo 134 de la Ley Federal del Trabajo, a someterse a los reconocimientos y exámenes médicos que “LA EMPRESA” le señale. <br/><br/>
+ 
+        <strong>DÉCIMA PRIMERA.-</strong> El “TRABAJADOR” se obliga a participar en los cursos de capacitación y adiestramiento que “LA EMPRESA” le indique para el mejor conocimiento y desarrollo de sus habilidades, mismos que podrán impartirse dentro y/o fuera de la jornada de labores. <br/><br/>
+ 
+        <strong>DÉCIMA SEGUNDA.-</strong> Lo no previsto por este Contrato se regirá por las disposiciones previstas en la Ley Federal del Trabajo y del Reglamento Interior de Trabajo que rigen en “LA EMPRESA”.<br/><br/> 
+
+        <strong>DÉCIMA TERCERA.-</strong> Ambas partes pactan que en defecto de lo establecido en el presente Contrato, se sujetarán a las disposiciones de la Ley Federal del Trabajo, y para todo conflicto o interpretación que se suscite con motivo de la ejecución, la interpretación y el cumplimiento del presente Contrato, están de acuerdo en someterse a la jurisdicción de la Junta Federal o Local de Conciliación y Arbitraje, renunciando al fuero que pudiese corresponderlas en razón del domicilio presente o futuro. <br/><br/>
+
+        <strong>DÉCIMA CUARTA.-</strong> En caso de fallecer designo como beneficiario (s) para el pago de los salarios y prestaciones devengadas y no cobradas por el suscrito, o las que se generen después de mi fallecimiento a la (s) siguiente (s) persona (s) con los porcentajes que enseguida se mencionan:<br/><br/>
+
+        <center><strong>Beneficiarios</strong></center> <br/><br/>
+
+        <table class="table table-bordered">
+            <tr style="background-color:#E5E5E5; font-weight:bold;text-align:center;">
+                <td style="width:30%;">
+                Nombre
+                </td>
+                <td>
+                Parentesco
+                </td>
+                <td>
+                Porcentaje
+                </td>
+                <td style="width:30%;">
+                Domicilio
+                </td>
+            </tr>
+            <tr>
+                <td></td><td></td><td></td><td></td>
+            </tr>
+            <tr>
+                <td></td><td></td><td></td><td></td>
+            </tr>
+            <tr>
+                <td></td><td></td><td></td><td></td>
+            </tr>
+            <tr>
+                <td></td><td></td><td></td><td></td>
+            </tr>           
+        </table>
+
+        <p style="page-break-after:always"></p>
+
+        Leído que fue por ambas partes este documento y una vez enteradas de su contenido y alcance, lo firman en la en Ciudad Juárez, Chihuahua a <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d')"/>. <br/><br/>
+
+        <table class="table table-bordered" style="font-weight:bold;text-align:center;">
+            <tr>
+                <td style="width:45%;">
+                    "LA EMPRESA"<br/>
+                    Unión de Ganaderos Lecheros de Juárez, S. A. de C. V. <br/><br/><br/>
+                    Lic. Gabriela Denisse Hipólito Valerio
+                </td>
+                <td>
+                
+                </td>
+                <td style="width:45%;">
+                "EL TRABAJADOR"
+                </td>
+            </tr>
+            <tr style="padding:0px;">
+                <td>Nombre y firma</td><td></td><td>Nombre y firma</td>
+            </tr>
+            <tr>
+                <td><br/><br/><br/></td><td></td><td></td>
+            </tr>  
+            <tr>
+                <td>
+                “TESTIGO”<br/>
+                (Nombre del Gerente General)<br/><br/><br/>
+                Ing. Jose Juan Bocanegra Hernández.
+                </td>
+                <td></td>
+                <td>
+                “TESTIGO”<br/>
+                (Nombre del Gerente / Jefe del Departamento)
+                </td>
+            </tr>  
+            <tr style="padding:0px;">
+                <td>Nombre y firma</td><td></td><td>Nombre y firma</td>
+            </tr>           
+        </table>
+
+                </div>
+
+                        
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+    </data>
+</odoo>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+   <record id="contract_view_form_lucerna" model="ir.ui.view">
+        <field name="name">hr.contract.lucerna</field>
+        <field name="model">hr.contract</field>
+        <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='date_end']" position="after">
+                <field name="fecha_antiguedad" string="Fecha de inicio de contrato"/>
+                <field name="fecha_fin_contrato" string="Fecha fin de contrato"/>
+            </xpath>
+            <xpath expr="//field[@name='date_start']" position="replace">
+                <field name="date_start" string="Fecha de antiguedad"/>
+            </xpath>
+
+            <xpath expr="//notebook" position="inside"> 
+                <page name="lucerna" string="Lucerna">
+                   <group cols="4">
+                     <group>
+                       <field name="compania_lucerna" />
+                       <field name="cedis_lucerna" />
+                       <field name="ruta_lucerna" />
+                       <field name="depto_lucerna" />
+                    </group>
+                    <group>
+                       <field name="diversos_lucerna"/>
+                       <field name="cliente_lucerna"/>
+                       <field name="producto_lucerna"/>
+                   </group>
+                </group>
+              </page>
+            </xpath>
+
+            <!--ADD TIPO DE CONTRATO-->
+            <xpath expr="//field[@name='job_id']" position="after">
+                <field name="categoria_lucerna"/>
+            </xpath>
+            <!--ADD TIPO DE CONTRATO-->
+            <xpath expr="//field[@name='structure_type_id']" position="after">
+                <field name="tipo_contrato_lucerna"/>
+            </xpath>
+
+        </field>
+    </record>
+
+    <record id="view_contract_form_inherit_lucerna2" model="ir.ui.view">
+        <field name="name">hr.contract.nomina</field>
+        <field name="model">hr.contract</field>
+        <field name="inherit_id" ref="nomina_cfdi_ee.hr_contract_view_form_nomina_cfdi"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='sueldo_base_cotizacion']" position="after">
+                <field name="sueldo_promedio_lucerna"/>
+                <field name="sueldo_bruto"/>
+                <field name="sueldo_neto"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

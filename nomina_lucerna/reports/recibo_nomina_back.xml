@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+    <record id="paperformat_recibo_nomina" model="report.paperformat">
+        <field name="name">Contrato Letter</field>
+        <field name="default" eval="True" />
+        <field name="format">A4</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Landscape</field>
+        <field name="margin_top">10</field>
+        <field name="margin_bottom">10</field>
+        <field name="margin_left">7</field>
+        <field name="margin_right">8</field>
+        <field name="header_line" eval="False" />
+        <field name="header_spacing">10</field>
+        <field name="dpi">90</field>
+    </record>
+
+        <!--Contrato Determinado-->
+    <report
+    id="report_recibo_nomina"
+    model="hr.employee"
+    string="Recibo de nómina formato"
+    report_type="qweb-pdf"
+    name="nomina_lucerna.recibo_nomina"
+    file="Recibo de nómina formato"
+    paperformat="paperformat_recibo_nomina"
+    />
+
+    <!--CONTRATO EXTERNAL LAYOUT-->
+    <template id="recibo_nomina_layout">
+        <div class="header">
+        </div>
+
+        <div class="article o_report_layout_standard" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id">
+            <t t-call="web.address_layout"/>
+            <t t-raw="0" />
+        </div>
+
+        <!--EMPIEZA EL FOOTER *ESTA BIEN*-->
+        <div class="footer">
+            
+        </div>
+        
+        <!--TERMINA EL FOOTER-->
+
+
+    </template>
+
+    <template id="recibo_nomina">
+        <t t-call="web.html_container">
+        <t t-call="nomina_lucerna.recibo_nomina_layout">
+            <div class="page"> 
+                <div class="oe_structure"/>    
+                    <div style="font-size:15px;text-align:justify">
+                      
+                      RECIBO DE NÓMINA FORMATO
+
+                    <!--START REPORT FORMAT NOMINA RECIBO-->
+
+                    <!--TABLE OF INFORMATION-->
+                    <div class="row" style="border:1px solid red;">
+
+                        <div class="col-6" style="font-size:13px;">
+                            <table class="table table-bordered" style="border:1px solid black;">
+                                <tr style="background-color:#E5E5E5; font-weight:bold;">
+                                    <td colspan="1" style="padding:3px;">NUMERO</td>
+                                    <td colspan="5" style="padding:3px;text-align:center;">NOMBRE</td>
+                                    <td colspan="2" style="padding:3px;text-align:center;">RFC</td>
+                                    <td colspan="2" style="padding:3px;text-align:center;">IMSS</td>
+                                </tr> 
+
+                                <tr>
+                                    <td colspan="1" style="padding:3px;">5789</td>
+                                    <td colspan="5" style="padding:3px;">DUVAN ZAVALETA</td>
+                                    <td colspan="2" style="padding:3px;text-align:center;">RFC48JNNC454</td>
+                                    <td colspan="2" style="padding:3px;text-align:center;">12345678912</td>
+                                </tr>
+
+                                <tr>
+                                    <td style="background-color:#E5E5E5;padding:3px; font-weight:bold;">Domicilio</td>
+                                    <td colspan="9" style="padding:3px;width:90%;">Una dirección xd</td>
+                                </tr>
+
+                                <tr style="background-color:#E5E5E5; font-weight:bold;">
+                                    <td colspan="3" style="padding:3px;text-align:center;">Periodo</td>
+                                    <td colspan="2" style="padding:3px;text-align:center;">Semana</td>
+                                    <td colspan="2" style="padding:3px;text-align:center;">Fecha de pago</td>
+                                    <td colspan="2" style="padding:3px;text-align:center;">S. Diario</td>
+                                    <td colspan="1" style="padding:3px;text-align:center;">S.int</td>
+                                </tr>
+                                <tr >
+                                    <td colspan="3" style="padding:3px;text-align:center;">26/20 al 10/12</td>
+                                    <td colspan="2" style="padding:3px;text-align:center;">52</td>
+                                    <td colspan="2" style="padding:3px;text-align:center;">1 de enero</td>
+                                    <td colspan="2" style="padding:3px;text-align:center;">440.40</td>
+                                    <td colspan="1" style="padding:3px;text-align:center;">550.50</td>
+                                </tr>
+
+                                <tr style="background-color:#E5E5E5;padding:3px; font-weight:bold;">
+                                    <td colspan="2" style="padding:3px;text-align:center;">Ingreso</td>
+                                    <td colspan="4" style="padding:3px;text-align:center;">CURP</td>
+                                    <td colspan="2" style="padding:3px;text-align:center;">Departamento</td>
+                                    <td colspan="2" style="padding:3px;text-align:center;">Puesto</td>
+                                </tr>
+                                <tr >
+                                    <td colspan="2" style="padding:3px;text-align:center;">22/02/20</td>
+                                    <td colspan="4" style="padding:3px;">ZAML77845151</td>
+                                    <td colspan="2" style="padding:3px;text-align:center;">Sistemas</td>
+                                    <td colspan="2" style="padding:3px;text-align:center;">Ingeniero</td>
+                                </tr>
+
+                                 <tr style="background-color:#E5E5E5;height:10px; font-weight:bold;">
+                                    <td colspan="6" style="padding:3px;text-align:center;">PERCEPCIONES</td>
+                                    <td colspan="4" style="padding:3px;text-align:center;">DEDUCCIONES</td>
+                                </tr>
+                            </table>
+
+                            <br/><br/>
+
+                            <table class="table table-bordered" style="border:1px solid black;font-size:13px;">
+                                <tr style="background-color:#E5E5E5;">
+                                    <td colspan="1" style="padding:3px;">TOTAL DE PERCEPCIONES:</td>
+                                    <td colspan="2" style="padding:3px;text-align:right;font-weight:bold;">4334.00</td>
+                                    <td colspan="2" style="padding:3px;">TOTAL DE DEDUCCIONES</td>
+                                    <td colspan="2" style="padding:3px;text-align:right;font-weight:bold;">420.25</td>
+                                </tr>
+                                <tr style="height:100px;border:1px solid black;">
+                                    <td colspan="4" style="max-width:100px;">
+                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras congue, ex in porta mattis, mauris sapien hendrerit nibh, 
+                                        a sollicitudin ex lectus nec tellus. Pellentesque a dui arcu. Phasellus in ante et orci tempor efficitur nec eget erat. 
+                                        Duis efficitur, tellus nec ullamcorper bibendum, leo tellus accumsan velit, id convallis augue eros in massa. Nam sed magna lacus. 
+                                        Aenean efficitur fringilla luctus. Curabitur bibendum mi sit amet sem congue varius. Sed nec nibh quis arcu dictum elementum. 
+                                        Sed facilisis fermentum ex. Integer eu lectus malesuada, facilisis orci vel, hendrerit dui. 
+                                        Donec euismod lacus eu diam imperdiet, eu vulputate ipsum vehicula. Cras sit amet euismod ante
+                                    </td>
+                                    <td colspan="4">
+                                        
+                                        <table style="padding-left:20%;text-align:center;">
+                                            <tr style="text-align:center;">
+                                                <td style="text-align:center;padding:3px;">
+                                                  4357.55
+                                                </td>
+                                            </tr>
+                                            <tr style="background-color:#E5E5E5;">
+                                                <td style="text-align:center;padding:3px;">
+                                                <strong>NETO A PAGAR</strong>
+                                                </td>
+                                            </tr>
+                                        </table>
+
+                                        <br/>
+                                        <center><strong>Ahorro acumulado</strong></center>
+                                        <center>0.00</center>
+
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <center><span style="font-size:15px;">RECIBI</span></center><br/>
+                            <center>_________________________________________________</center>
+
+                        </div>
+
+                    </div>
+
+                    </div>      
+            </div>
+
+
+        </t>
+        </t>
+    </template>
+
+
+</data>
+
+</odoo>

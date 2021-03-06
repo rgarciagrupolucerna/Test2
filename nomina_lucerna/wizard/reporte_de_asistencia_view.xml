@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+	    <record id="reporte_de_asistencia_view_form" model="ir.ui.view">
+	        <field name="name">reporte.de.asistencia.form.view</field>
+	        <field name="model">reporte.de.asistencia</field>
+	        <field name="arch" type="xml">
+	            <form>
+	            	<group>
+		                <group>
+		                    <field name="start_date"/>
+		                    <field name="semana"/>
+		                </group>
+		                <group>
+		                	<field name="end_date"/>
+		                </group>
+		            </group>
+		            <group>
+		                <field name="department_ids" widget="many2many_tags"/>
+		            </group>
+	                <footer>
+	                    <button name="print_reporte_de_asistencia" string="IMPRIMIR" type="object" class="oe_highlight"/>
+	                    <button string="Cancelar" class="oe_link" special="cancel"/>
+	                </footer>
+	            </form>
+	        </field>
+	    </record>
+	    
+	    <record id="action_reporte_de_asistencia" model="ir.actions.act_window">
+	        <field name="name">Reporte de asistencia</field>
+	        <field name="res_model">reporte.de.asistencia</field>
+	        <field name="type">ir.actions.act_window</field>
+	        <field name="view_mode">form</field>
+	        <field name="view_id" ref="reporte_de_asistencia_view_form"/>
+	        <field name="target">new</field>
+	    </record>
+	    
+	    <menuitem name="Reporte de asistencia" id="menu_reporte_de_asistencia" parent="nomina_cfdi_extras_ee.menu_main_reportes" action="action_reporte_de_asistencia" sequence="20"/>
+    </data>
+
+</odoo>
