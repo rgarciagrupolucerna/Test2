@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<report
+    id="report_nomina_despensa_card_xlsx"
+    model="hr.payslip.run"
+    string="Nómina despensa"
+    report_type="xlsx"
+    name="nomina_cfdi_despensa.report_nomina_despensa"
+    file="C75796001"
+    attachment_use="False"
+    />
+</odoo>
