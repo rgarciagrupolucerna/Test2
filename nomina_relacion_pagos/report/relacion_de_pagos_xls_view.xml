@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<report id="action_relacion_de_pagos_xls" 
+			model="hr.payslip.run" 
+			string="Relacion de pagos XLS" 
+			report_type="xlsx" 
+			name="nomina_relacion_pagos.relacion_de_pagos_xls" 
+			file="nomina_relacion_pagos.relacion_de_pagos_xls"
+	        attachment_use="False"/>
+	             		
+</odoo>
