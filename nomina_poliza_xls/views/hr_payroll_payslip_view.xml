@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+	<record id="hr_payslip_run_form_nomina_poliza_xls" model="ir.ui.view">
+	            <field name="name">hr.payslip.run.form.nomina</field>
+	            <field name="model">hr.payslip.run</field>
+	            <field name="priority">50</field>
+	            <field name="inherit_id" ref="nomina_cfdi_ee.hr_payslip_run_form_nomina_cfdi"/>
+	            <field name="arch" type="xml">
+	   				<button name="recalcular_nomina_payslip_batch" position="after">
+	   					<button string="Poliza XLS" name="poliza_XLS" type="object"  class="oe_highlight"/>
+	   				</button>
+	            </field>
+	 </record>
+
+        <record id="hr_salary_rule_lucerna_inherit" model="ir.ui.view">
+            <field name="name">hr.lucerna.form</field>
+            <field name="model">hr.salary.rule</field>
+            <field name="inherit_id" ref="nomina_cfdi_conta_ee.hr_salary_rule_form_inherit"/>
+            <field name="arch" type="xml">
+                <field name="cta_acreedora_ids" position="after">
+                        <group string="Cuentas de gasto" colspan="4">
+                                <field name="tipo_de_gasto" nolabel="1" colspan="4">
+                                    <tree name ="cuentas_gasto" string="Cuentas gasto" editable="bottom">
+                                       <field name="depto_lucerna"/>
+                                       <field name="codigo_mayor" />
+                                    </tree>
+                                </field>
+                          </group> 
+              </field>
+                <field name="account_tax_id" position="after">
+                        <field name="codigo_pasivo" />
+                        <field name="nombre_alterno" />
+              </field>
+            </field>
+        </record>
+
+</odoo>
