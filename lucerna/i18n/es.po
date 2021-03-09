@@ -1,0 +1,28 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* lucernaugl
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 13.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-10-24 01:55+0000\n"
+"PO-Revision-Date: 2020-10-23 19:57-0600\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"Language: es\n"
+"X-Generator: Poedit 2.4.1\n"
+
+#. module: lucernaugl
+#: model:ir.model,name:lucernaugl.model_purchase_order
+msgid "Purchase Order"
+msgstr "Pedido de compra"
+
+#. module: lucernaugl
+#: model_terms:ir.ui.view,arch_db:lucernaugl.purchase_order_form_inherit
+msgid "Set to Approve"
+msgstr "Solicitar Aprobación"
