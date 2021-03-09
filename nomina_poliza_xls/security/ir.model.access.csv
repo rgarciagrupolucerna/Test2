@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_nomina_lucerna,nomina_cuenta_lucerna,nomina_poliza_xls.model_nomina_cuenta_lucerna,om_hr_payroll.group_hr_payroll_user,1,1,1,1
+access_poliza_xls,poliza_xls,nomina_poliza_xls.model_poliza_xls,,1,1,1,1
+access_cuentas_lucerna,cuentas_lucerna,nomina_poliza_xls.model_nomina_cuenta_lucerna,,1,1,1,1
